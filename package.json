@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node ./index.js",
+    "test": "node ./node_modules/mocha/bin/_mocha \"app/**/*.spec.js\"",
+    "watch-test": "nodemon --exec 'npm run test'"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/cgdibble/video-sorter/issues"
   },
-  "homepage": "https://github.com/cgdibble/video-sorter#readme"
+  "homepage": "https://github.com/cgdibble/video-sorter#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "ffprobe-static": "^2.0.0",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6"
+  },
+  "dependencies": {
+    "JSONStream": "^1.2.1"
+  }
 }
