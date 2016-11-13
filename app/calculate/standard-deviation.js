@@ -3,7 +3,6 @@ const R = require('ramda');
 module.exports = function (logger, videoPackets) {
   return function(videoPackets) {
     const packetAverage = R.compose(calculateAverage, collectPacketIntAverages)(videoPackets);
-
     const standDeviation = R.map(calculateStandardDeviation, collectPacketIntAverages)(videoPackets);
 
     return standDeviation;
@@ -21,14 +20,12 @@ function calculateAverage(data) {
 }
 
 function collectPacketIntAverages(packetData) {
-
   return R.map((packet) => {
     return Number(packet.size);
   }, packetData)
 }
 
 function squaredDistanceFromMean(average, packetValue) {
-
   return function(packetValue) {
     const distance = packetValue - average;
     return Math.pow(distance, 2);
