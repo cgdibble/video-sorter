@@ -1,5 +1,5 @@
 const childProcess = require('child_process');
-let packetExtractor = require('./app/packet-extractor')(ffprobe);
+let packetExtractor = require('./app/calculate/standard-deviation');
 
 
 let JSONStream = require('JSONStream');

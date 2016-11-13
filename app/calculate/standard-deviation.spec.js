@@ -1,26 +1,22 @@
 const { assert } = require('chai');
 const sinon  = require('sinon');
-const packetExtractor = require('./packet-extractor');
+const packetExtractor = require('./standard-deviation');
 const { collectPacketIntAverages,
         calculateAverage,
         assembleMetaData,
         squaredDistanceFromMean,
         sumSquaredDistanceFromMeans,
-        calculateStandardDeviation } = require('./packet-extractor');
+        calculateStandardDeviation } = require('./standard-deviation');
 
 describe('Packet Extractor', () => {
   const packetData = [
     {
       pts_time: '0.1',
-      size: '100'
-    },
-    {
-      pts_time: '0.2',
-      size: '200'
+      size: '1'
     },
     {
       pts_time: '0.3',
-      size: '300'
+      size: '3'
     }
   ]
   const packetParams = '-select_streams v -show_entries packet=pts_time,size';
@@ -35,19 +31,17 @@ describe('Packet Extractor', () => {
     sandbox.restore();
   });
 
-  it('should return the meta data', () => {
-    const expectedMetaData = {
-      average: 200
-    }
+  it('should return the standard deviation', () => {
+    const expectedStdDeviation = 1;
 
-    let metaData = packetExtractor(logger)(packetData);
+    let standardDeviation = packetExtractor(logger)(packetData);
 
-    assert.deepEqual(metaData, expectedMetaData, 'There was an issue in calculating the meta data');
+    assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating the meta data');
   });
 
   context('#collectPacketIntAverages', () => {
     it('should return the video string', () => {
-      let expectedIntAverages = [100, 200, 300];
+      let expectedIntAverages = [1, 2, 3];
       let packetAverages = collectPacketIntAverages(packetData);
 
       assert.deepEqual(packetAverages, expectedIntAverages, 'the correct video path was not returned');
@@ -62,18 +56,6 @@ describe('Packet Extractor', () => {
       let average = calculateAverage(intAverages);
 
       assert.equal(average, expectedAverage, 'Average bitrate was not calculated');
-    });
-  });
-
-  context('#assembleMetaData', () => {
-    it('should return the correctly formatted metadata', () => {
-      const average = 200;
-      const expectedMetaData = {
-        average: 200
-      }
-      const metaData = assembleMetaData(average);
-
-      assert.deepEqual(metaData, expectedMetaData, 'meta data was not formatted correctly');
     });
   });
 
