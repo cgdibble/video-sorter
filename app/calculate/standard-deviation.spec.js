@@ -3,7 +3,6 @@ const sinon  = require('sinon');
 const packetExtractor = require('./standard-deviation');
 const { collectPacketIntAverages,
         calculateAverage,
-        assembleMetaData,
         squaredDistanceFromMean,
         sumSquaredDistanceFromMeans,
         calculateStandardDeviation } = require('./standard-deviation');
@@ -36,15 +35,15 @@ describe('Packet Extractor', () => {
 
     let standardDeviation = packetExtractor(logger)(packetData);
 
-    assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating the meta data');
+    assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating standard deviation');
   });
 
   context('#collectPacketIntAverages', () => {
     it('should return the video string', () => {
-      let expectedIntAverages = [1, 2, 3];
+      let expectedIntAverages = [1, 3];
       let packetAverages = collectPacketIntAverages(packetData);
 
-      assert.deepEqual(packetAverages, expectedIntAverages, 'the correct video path was not returned');
+      assert.deepEqual(packetAverages, expectedIntAverages, 'the correct integer averages were not returned');
     });
   });
 
