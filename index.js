@@ -1,18 +1,21 @@
 const childProcess = require('child_process');
-let packetExtractor = require('./app/packet-extractor');
+let packetExtractor = require('./app/packet-extractor')(ffprobe);
 
 
 let JSONStream = require('JSONStream');
 let video = process.argv[process.argv.length - 1];
 
-// ffprobe -v quiet -print_format json -show_format -show_streams "lolwut.mp4" > "lolwut.mp4.json"
-let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', '-show_entries', 'packet=pts_time,size', /*'-report',*/ 'niceViewValley.MP4', '2>', 'videoData.json']);
+let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', '-show_entries', 'packet=pts_time,size', '-i', 'niceViewValley.MP4']);
 let stderr;
 
+ffprobe.once('close', function (code) {
+  if (code) console.log("ERROR ERROR ERROR", code);
+});
+
 ffprobe.stdout
-  .on('data', (data) => {
-      console.log("ermergerd thems packets::::::::",JSONStream.parse(data))
-  })
-  // .pipe(JSONStream.parse())
-  // .once('data', (data) => {
-  // })
+  .pipe(JSONStream.parse())
+  .once('data', (data, there) => {
+    // Call packet extractor from here with the packets
+    console.log("plain data::", data.packets);
+
+  });
