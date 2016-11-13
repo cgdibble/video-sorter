@@ -21,6 +21,7 @@ function calculateAverage(data) {
 }
 
 function collectPacketIntAverages(packetData) {
+
   return R.map((packet) => {
     return Number(packet.size);
   }, packetData)

@@ -1,5 +1,6 @@
+const logger = require('logger');
 const childProcess = require('child_process');
-let packetExtractor = require('./app/calculate/standard-deviation');
+const calculateStandardDeviation = require('./app/calculate/standard-deviation')(logger);
 
 
 let JSONStream = require('JSONStream');
@@ -16,6 +17,7 @@ ffprobe.stdout
   .pipe(JSONStream.parse())
   .once('data', (data, there) => {
     // Call packet extractor from here with the packets
-    console.log("plain data::", data.packets);
+    const stdev = calculateStandardDeviation(data.packets)
+    console.log("Standard Deviation of Packet Data::::", stdev)
 
   });
