@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const packetExtractor = require('./standard-deviation');
+const calculateAverage = require('./average');
 const { collectPacketIntAverages,
-        calculateAverage,
         squaredDistanceFromMean,
         sumSquaredDistanceFromMeans,
         calculateStandardDeviation } = require('./standard-deviation');
@@ -9,15 +9,15 @@ const { collectPacketIntAverages,
 describe('Packet Extractor', () => {
   const packetData = [
     {
-      pts_time: '0.1',
+      pkt_size: '1',
       size: '1'
     },
     {
-      pts_time: '0.3',
+      pkt_size: '3',
       size: '3'
     }
   ]
-  const packetParams = '-select_streams v -show_entries packet=pts_time,size';
+  const packetParams = '-select_streams v -show_entries packet=pkt_size,size';
 
   let logger = {
     info: function(data) { console.log(data); }
@@ -25,16 +25,19 @@ describe('Packet Extractor', () => {
 
   it('should return the standard deviation', () => {
     const expectedStdDeviation = 1;
+    const dataType = 'pkt_size';
 
-    let standardDeviation = packetExtractor(logger)(packetData);
+    let standardDeviation = packetExtractor(calculateAverage, logger)(dataType, packetData);
 
     assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating standard deviation');
   });
 
   context('#collectPacketIntAverages', () => {
-    it('should return the video string', () => {
-      let expectedIntAverages = [1, 3];
-      let packetAverages = collectPacketIntAverages(packetData);
+    it('should return integer averages', () => {
+      const expectedIntAverages = [1, 3];
+      const dataType = 'pkt_size';
+
+      const packetAverages = collectPacketIntAverages(dataType)(packetData);
 
       assert.deepEqual(packetAverages, expectedIntAverages, 'the correct integer averages were not returned');
     });
@@ -69,7 +72,7 @@ describe('Packet Extractor', () => {
       const intAverages = [8, 12];
       const expectedValue = 2;
 
-      let value = calculateStandardDeviation(intAverages);
+      let value = calculateStandardDeviation(calculateAverage)(intAverages);
 
       assert.deepEqual(value, expectedValue, 'the squared distance from mean was calculated incorrectly');
     });
