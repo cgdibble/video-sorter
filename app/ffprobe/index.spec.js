@@ -79,5 +79,8 @@ describe('Ffprobe Processing', () => {
 
       assert.deepEqual(command, expectedCommand, 'Command was created corrently');
     });
+
+    it('should throw if invalid additional parameters are given');
+
   });
 });
