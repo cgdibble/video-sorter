@@ -1,17 +1,24 @@
 const logger = require('logger');
 const childProcess = require('child_process');
 const extractVideoData = require('./app/calculate');
-// const calculateAverage = require('./app/calculate/standard-deviation');
-// const calculateStandardDeviation = require('./app/calculate/standard-deviation')(calculateAverage, extractVideoData, logger);
 let JSONStream = require('JSONStream');
-let video = process.argv[process.argv.length - 1];
 
 // frame=pkt_size
 /*
   use packet SIZE to find total video size pretty exactly.
+
+
+  -show_format
+    --> shows basic info about the video/audio encoding
+  ------------------
+  -show_frames
+    --> show info around each individual frame
+    ---> frame=pkt_size limits the output to specific fields listed, has tp be preceeded by -show_frames
+    ---> PICT_TYPE indicates type of frame!!
+    ????? -> Which is more beneficial: looking at frames or packets?
+  ------------------
 */
-let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', '-show_frames',/* 'packet=pkt_size,size','frame=pkt_size',*/ '-i', 'niceViewValley.MP4']);
-let stderr;
+let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', /*'-show_format',*/ /*'-show_streams',*/ /*'-show_frames',*/ /* 'packet=pkt_size,size','frame=pkt_size',*/ '-i', 'niceViewValley.MP4']);
 
 ffprobe.once('close', function (code) {
   if (code) console.log("ERROR ERROR ERROR", code);
@@ -21,13 +28,23 @@ ffprobe.stdout
   .pipe(JSONStream.parse())
   .once('data', (data, there) => {
     // Call packet extractor from here with the packets
-    const videoData = extractVideoData(data.frames);
-    console.log("VIDEO DATA::::", videoData)
+    console.log("VIDEO DATA::::", data)
+    // const videoData = extractVideoData(data.frames);
+    // console.log("VIDEO DATA::::", videoData)
 
   });
 
+function logSubsetOfData(max, data) {
+  data.forEach((value, index) => {
+    if (index <= max) {
+      console.log(`Value at ${index}:::`, value);
+    } else {
+      // break;
+    }
+  });
+}
 ////////////////////////////////////////////////
-//// EXAMPLE PACKET OUTPUT FOR AUDIO/VIDEO
+//// EXAMPLE PACKET OUTPUT FOR AUDIO/VIDEO ---> PACKETS
 ////////////////////////////////////////////////
 /*
 
@@ -55,6 +72,35 @@ ffprobe.stdout
        flags: 'K' },
 
 
+////////////////////////////////////////////////////////
+///////////////////  FRAMES DATA  //////////////////////
+////////////////////////////////////////////////////////
+
+{
+  media_type: 'video',
+  stream_index: 0,
+  key_frame: 0,
+  pkt_pts: 0,
+  pkt_pts_time: '0.000000',
+  pkt_dts: 0,
+  pkt_dts_time: '0.000000',
+  best_effort_timestamp: 0,
+  best_effort_timestamp_time: '0.000000',
+  pkt_duration: 3003,
+  pkt_duration_time: '0.033367',
+  pkt_pos: '600075',
+  pkt_size: '54608',
+  width: 1920,
+  height: 1080,
+  pix_fmt: 'yuv420p',
+  sample_aspect_ratio: '1:1',
+  pict_type: 'B',
+  coded_picture_number: 1,
+  display_picture_number: 0,
+  interlaced_frame: 0,
+  top_field_first: 0,
+  repeat_pict: 0
+}
 */
 
 
