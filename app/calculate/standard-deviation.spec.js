@@ -32,17 +32,6 @@ describe('Packet Extractor', () => {
     assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating standard deviation');
   });
 
-  // context('#extractIntegerValues', () => {
-  //   it('should return integer averages', () => {
-  //     const expectedIntAverages = [1, 3];
-  //     const dataType = 'pkt_size';
-  //
-  //     const packetAverages = extractIntegerValues(dataType)(packetData);
-  //
-  //     assert.deepEqual(packetAverages, expectedIntAverages, 'the correct integer averages were not returned');
-  //   });
-  // });
-
   context('#calculateAverage', () => {
     it('calculate total average of all packets', () => {
       const intAverages = [100, 200, 300];
