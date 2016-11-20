@@ -76,5 +76,6 @@ bufsize should be about 1 or 2 seconds, so have it synced with bitrate
 ---> set bufsize to somewhere between the same as your maxrate (one second) and twice of your maxrate (2 seconds).
             If this is still not low enough, lower your maxrate and then re-set bufsize accordingly.
  --> http://superuser.com/questions/945413/how-to-consider-bitrate-maxrate-and-bufsize-of-a-video-for-web
+ --> https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
 
 */
