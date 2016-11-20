@@ -8,18 +8,16 @@ const extractIntegerValues = require('./extract-integer-values');
 const calculateStandardDeviation = require('./standard-deviation')(calculateAverage, extractIntegerValues, logger);
 
 describe('Calculate -> Component', () => {
-  const packetData = {
-    frames:[
-      {
-        pkt_size: '1',
-        size: '1'
-      },
-      {
-        pkt_size: '3',
-        size: '3'
-      }
-    ]
-  };
+  const packetData = [
+    {
+      pkt_size: '1',
+      size: '1'
+    },
+    {
+      pkt_size: '3',
+      size: '3'
+    }
+  ];
 
   it('should return an object containing the videos average and stdev bitrate', () => {
     const expectedData = {

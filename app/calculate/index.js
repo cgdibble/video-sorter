@@ -6,8 +6,8 @@ const calculateStandardDeviation = require('./standard-deviation')(calculateAver
 
 module.exports = function(dataSet) {
   const relevantValue = 'pkt_size';
-  const average = R.compose(calculateAverage, extractIntegerValues(relevantValue))(dataSet.frames);
-  const stdev = calculateStandardDeviation(relevantValue, dataSet.frames);
+  const average = R.compose(calculateAverage, extractIntegerValues(relevantValue))(dataSet);
+  const stdev = calculateStandardDeviation(relevantValue, dataSet);
 
   return {
     average,

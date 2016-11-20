@@ -1,12 +1,12 @@
 const { assert } = require('chai');
-const packetExtractor = require('./standard-deviation');
+const videoStandardDeviation = require('./standard-deviation');
 const calculateAverage = require('./average');
 const extractIntegerValues = require('./extract-integer-values');
 const { squaredDistanceFromMean,
         sumSquaredDistanceFromMeans,
-        calculateStandardDeviation } = require('./standard-deviation');
+        calculate } = require('./standard-deviation');
 
-describe('Packet Extractor', () => {
+describe('Standard Deviation', () => {
   const packetData = [
     {
       pkt_size: '1',
@@ -27,7 +27,7 @@ describe('Packet Extractor', () => {
     const expectedStdDeviation = 1;
     const dataType = 'pkt_size';
 
-    let standardDeviation = packetExtractor(calculateAverage, extractIntegerValues, logger)(dataType, packetData);
+    let standardDeviation = videoStandardDeviation(calculateAverage, extractIntegerValues, logger)(dataType, packetData);
 
     assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating standard deviation');
   });
@@ -55,13 +55,13 @@ describe('Packet Extractor', () => {
     });
   });
 
-  context('#calculateStandardDeviation', () => {
+  context('#calculate', () => {
     it('should return average of squaredDistanceFromMeans', () => {
       const average = 2;
       const intAverages = [8, 12];
       const expectedValue = 2;
 
-      let value = calculateStandardDeviation(calculateAverage)(intAverages);
+      let value = calculate(calculateAverage)(intAverages);
 
       assert.deepEqual(value, expectedValue, 'the squared distance from mean was calculated incorrectly');
     });
