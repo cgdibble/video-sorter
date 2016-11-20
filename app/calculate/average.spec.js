@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const calculateAverage = require('./average');
 
-describe('#calculateAverage', () => {
+describe('Average', () => {
   it('calculate total average of all packets', () => {
     const intAverages = [100, 200, 300];
     const expectedAverage = 200;

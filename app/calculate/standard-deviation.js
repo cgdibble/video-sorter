@@ -1,24 +1,16 @@
 const R = require('ramda');
 
-module.exports = function (calculateAverage, logger, valueType, videoPackets) {
+module.exports = function (calculateAverage, extractIntegerValues, logger, valueType, videoPackets) {
   return function(valueType, videoPackets) {
-    const packetAverage = R.compose(calculateAverage, collectPacketIntAverages(valueType))(videoPackets);
-    const standDeviation = R.map(calculateStandardDeviation(calculateAverage), collectPacketIntAverages(valueType))(videoPackets);
+    const packetAverage = R.compose(calculateAverage, extractIntegerValues(valueType))(videoPackets);
+    const standDeviation = R.map(calculateStandardDeviation(calculateAverage), extractIntegerValues(valueType))(videoPackets);
 
     return standDeviation;
   }
 }
-module.exports.collectPacketIntAverages = collectPacketIntAverages;
+
 module.exports.squaredDistanceFromMean = squaredDistanceFromMean;
 module.exports.calculateStandardDeviation = calculateStandardDeviation;
-
-function collectPacketIntAverages(valueType, packetData) {
-  return function(packetData) {
-    return R.map((packet) => {
-      return Number(packet[valueType]);
-    }, packetData);
-  }
-}
 
 function squaredDistanceFromMean(average, packetValue) {
   return function(packetValue) {

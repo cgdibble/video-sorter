@@ -25,6 +25,7 @@ ffprobe.stdout
     // Call packet extractor from here with the packets
     // console.log("#######", data)
     const stdev = calculateStandardDeviation('pkt_size', data.frames)
+    const verage = calculateAverage(data.frames)
     console.log("Standard Deviation of Packet Data::::", stdev)
 
   });

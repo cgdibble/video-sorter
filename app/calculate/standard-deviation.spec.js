@@ -1,8 +1,8 @@
 const { assert } = require('chai');
 const packetExtractor = require('./standard-deviation');
 const calculateAverage = require('./average');
-const { collectPacketIntAverages,
-        squaredDistanceFromMean,
+const extractIntegerValues = require('./extract-integer-values');
+const { squaredDistanceFromMean,
         sumSquaredDistanceFromMeans,
         calculateStandardDeviation } = require('./standard-deviation');
 
@@ -27,21 +27,21 @@ describe('Packet Extractor', () => {
     const expectedStdDeviation = 1;
     const dataType = 'pkt_size';
 
-    let standardDeviation = packetExtractor(calculateAverage, logger)(dataType, packetData);
+    let standardDeviation = packetExtractor(calculateAverage, extractIntegerValues, logger)(dataType, packetData);
 
     assert.deepEqual(standardDeviation, expectedStdDeviation, 'There was an issue in calculating standard deviation');
   });
 
-  context('#collectPacketIntAverages', () => {
-    it('should return integer averages', () => {
-      const expectedIntAverages = [1, 3];
-      const dataType = 'pkt_size';
-
-      const packetAverages = collectPacketIntAverages(dataType)(packetData);
-
-      assert.deepEqual(packetAverages, expectedIntAverages, 'the correct integer averages were not returned');
-    });
-  });
+  // context('#extractIntegerValues', () => {
+  //   it('should return integer averages', () => {
+  //     const expectedIntAverages = [1, 3];
+  //     const dataType = 'pkt_size';
+  //
+  //     const packetAverages = extractIntegerValues(dataType)(packetData);
+  //
+  //     assert.deepEqual(packetAverages, expectedIntAverages, 'the correct integer averages were not returned');
+  //   });
+  // });
 
   context('#calculateAverage', () => {
     it('calculate total average of all packets', () => {
