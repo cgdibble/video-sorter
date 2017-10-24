@@ -18,7 +18,7 @@ let JSONStream = require('JSONStream');
     ????? -> Which is more beneficial: looking at frames or packets?
   ------------------
 */
-let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', /*'-show_format',*/ /*'-show_streams',*/ /*'-show_frames',*/ /* 'packet=pkt_size,size','frame=pkt_size',*/ '-i', 'niceViewValley.MP4']);
+let ffprobe = childProcess.spawn('ffprobe', ['-v', 'quiet', '-print_format', 'json', /*'-show_format',*/ /*'-show_streams',*/ '-show_frames', /* 'packet=pkt_size,size','frame=pkt_size',*/ '-i', 'niceViewValley.MP4']);
 
 ffprobe.once('close', function (code) {
   if (code) console.log("ERROR ERROR ERROR", code);
@@ -28,7 +28,7 @@ ffprobe.stdout
   .pipe(JSONStream.parse())
   .once('data', (data, there) => {
     // Call packet extractor from here with the packets
-    console.log("VIDEO DATA::::", data)
+    console.log("VIDEO DATA::::", data.frames[2])
     // const videoData = extractVideoData(data.frames);
     // console.log("VIDEO DATA::::", videoData)
 
